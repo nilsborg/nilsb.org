@@ -1,12 +1,26 @@
-import { getPage, notion } from "../utils/notion.ts";
+import { getPage, getPosts } from "../utils/notion.ts";
 
 export default async function Home() {
-  const { page, blocks } = await getPage("17f10633a51e804a8fe4e3f6b3c852d9");
+  const posts = await getPosts();
 
   return (
     <div class="p-2">
-      <pre>{JSON.stringify(page, null, 2)}</pre>
-      <pre>{JSON.stringify(blocks, null, 2)}</pre>
+      <h1 class="text-3xl font-bold mb-8">Blog Posts</h1>
+      <div class="space-y-4">
+        {posts.map((post) => (
+          <article key={post.id}>
+            <a
+              href={`/posts/${post.properties.slug.url}`}
+              class="block p-4 border rounded hover:bg-gray-50"
+            >
+              <h2 class="text-xl font-semibold">
+                {post.properties.Name.title[0].plain_text}
+              </h2>
+            </a>
+            {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
