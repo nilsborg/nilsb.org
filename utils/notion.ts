@@ -1,76 +1,93 @@
-import {
-  Client,
-  isNotionClientError,
-} from "https://deno.land/x/notion_sdk/src/mod.ts";
+/// <reference lib="deno.unstable" />
+
+import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
 
 const postsDbId = Deno.env.get("NOTION_POSTS_DB_ID");
-
-export const notion = new Client({
+const notion = new Client({
   auth: Deno.env.get("NOTION_TOKEN"),
 });
+const kv = await Deno.openKv();
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
 
-export async function getPage(pageId: string) {
-  try {
-    const page = await notion.pages.retrieve({ page_id: pageId });
-    const blocks = await notion.blocks.children.list({ block_id: pageId });
+async function getCachedOrFetch<T>(
+  key: string[],
+  refresh: boolean,
+  fetchFn: () => Promise<T>,
+): Promise<{ data: T; version: string }> {
+  const cached = await kv.get<{ value: T; timestamp: number; version: string }>(
+    key,
+  );
 
-    return {
-      page,
-      blocks: blocks.results,
-    };
-  } catch (error: unknown) {
-    if (
-      isNotionClientError(error)
-    ) {
-      console.error("Notion API error:", error);
-    } else {
-      // Other error handling code
-      console.error(error);
+  if (!refresh && cached.value) {
+    const age = Date.now() - cached.value.timestamp;
+    if (age < CACHE_TTL) {
+      return {
+        data: cached.value.value,
+        version: cached.value.version,
+      };
     }
   }
+
+  const fresh = await fetchFn();
+  const newVersion = Date.now().toString();
+  await kv.set(key, {
+    value: fresh,
+    timestamp: Date.now(),
+    version: newVersion,
+  });
+
+  return { data: fresh, version: newVersion };
 }
 
-export async function getPosts() {
-  if (!postsDbId) throw new Error("Database ID not found");
-  try {
-    const response = await notion.databases.query({
-      database_id: postsDbId,
-    });
+export async function getPosts(refresh: boolean) {
+  if (!postsDbId) throw new Error("Database ID not provided");
 
-    return response.results;
-  } catch (error) {
-    console.error("Failed to fetch posts:", error);
-    throw error;
-  }
+  return await getCachedOrFetch(["posts"], refresh, async () => {
+    try {
+      const response = await notion.databases.query({
+        database_id: postsDbId,
+      });
+      return response.results;
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+      throw error;
+    }
+  });
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string, refresh: boolean) {
   if (!postsDbId) throw new Error("Database ID not found");
-  try {
-    const response = await notion.databases.query({
-      database_id: postsDbId,
-      filter: {
-        property: "slug",
-        rich_text: {
-          equals: slug,
+
+  return await getCachedOrFetch(["posts", slug], refresh, async () => {
+    try {
+      const response = await notion.databases.query({
+        database_id: postsDbId,
+        filter: {
+          property: "slug",
+          rich_text: {
+            equals: slug,
+          },
         },
-      },
-    });
+      });
 
-    if (!response.results[0]) {
-      throw new Error(`Post not found: ${slug}`);
+      if (!response.results[0]) {
+        throw new Error(`Post not found: ${slug}`);
+      }
+
+      const pageId = response.results[0].id;
+
+      const [page, blocks] = await Promise.all([
+        notion.pages.retrieve({ page_id: pageId }),
+        notion.blocks.children.list({ block_id: pageId }),
+      ]);
+
+      return {
+        page,
+        blocks: blocks.results,
+      };
+    } catch (error) {
+      console.error("Failed to fetch post:", error);
+      throw error;
     }
-
-    const pageId = response.results[0].id;
-    const page = await notion.pages.retrieve({ page_id: pageId });
-    const blocks = await notion.blocks.children.list({ block_id: pageId });
-
-    return {
-      page,
-      blocks: blocks.results,
-    };
-  } catch (error) {
-    console.error("Failed to fetch post:", error);
-    throw error;
-  }
+  });
 }

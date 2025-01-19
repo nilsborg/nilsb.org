@@ -5,14 +5,30 @@ import { formatDate } from "../utils/formatDate.ts";
 import { isSignificantUpdate } from "../utils/isSignificantUpdate.ts";
 
 export const handler: Handlers = {
-  async GET(_, ctx) {
-    const data = await getPosts();
+  async GET(_req, ctx) {
+    const url = new URL(_req.url);
+    const refresh = url.searchParams.get("refresh") === "true";
+    const { data, version } = await getPosts(refresh);
+
     if (!data) {
       return ctx.renderNotFound({
         message: "Can't get posts",
       });
     }
-    return ctx.render(data);
+    const resp = await ctx.render(data);
+    const headers = new Headers(resp.headers);
+    // Set cache headers
+    headers.set(
+      "Cache-Control",
+      "public, max-age=60, stale-while-revalidate=3600",
+    );
+    // Set ETag based on content version
+    headers.set("ETag", `"${version}"`);
+
+    return new Response(resp.body, {
+      status: resp.status,
+      headers,
+    });
   },
 };
 
