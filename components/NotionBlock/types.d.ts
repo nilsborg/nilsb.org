@@ -1,3 +1,10 @@
+export type NotionBlock =
+  | Heading2Block
+  | ParagraphBlock
+  | BulletedListItemBlock
+  | CalloutBlock
+  | ImageBlock;
+
 export interface User {
   object: "user";
   id: string;
@@ -88,10 +95,3 @@ export interface ImageBlock extends BlockBase {
     };
   };
 }
-
-export type Block =
-  | Heading2Block
-  | ParagraphBlock
-  | BulletedListItemBlock
-  | CalloutBlock
-  | ImageBlock;

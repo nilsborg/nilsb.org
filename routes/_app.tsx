@@ -9,8 +9,12 @@ export default function App({ Component }: PageProps) {
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body>
-        <a href="/">Home</a>
-        <Component />
+        <header class="p-4">
+          <a href="/">Home</a>
+        </header>
+        <main class="p-4">
+          <Component />
+        </main>
       </body>
     </html>
   );

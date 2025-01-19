@@ -1,5 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import NotionBlock from "../../components/NotionBlock/NotionBlock.tsx";
+import type { NotionBlock } from "../../components/NotionBlock/types.d.ts";
+import type { NotionPage } from "../../components/NotionPage/types.d.ts";
+import Block from "../../components/NotionBlock/Block.tsx";
 import { getPostBySlug } from "../../utils/notion.ts";
 
 export const handler: Handlers = {
@@ -15,16 +17,17 @@ export const handler: Handlers = {
 };
 
 export default function PostPage(props: PageProps) {
-  const { page, blocks } = props.data;
+  const page: NotionPage = props.data.page;
+  const blocks: NotionBlock[] = props.data.blocks;
 
   return (
-    <div class="max-w-4xl mx-auto py-8">
-      <h1 class="text-4xl font-bold mb-8">
+    <article class="grid gap-4">
+      <h1 class="text-4xl">
         {page.properties.Name.title[0].plain_text}
       </h1>
-      <div class="grid gap-4">
-        {blocks.map((block) => <NotionBlock {...block} />)}
+      <div>
+        {blocks.map((block) => <Block {...block} />)}
       </div>
-    </div>
+    </article>
   );
 }

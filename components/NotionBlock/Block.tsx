@@ -1,9 +1,9 @@
-import type { Block } from "./types.d.ts";
+import type { NotionBlock } from "./types.d.ts";
 import Heading2Block from "./blocks/Heading2Block.tsx";
 import ParagraphBlock from "./blocks/ParagraphBlock.tsx";
 import BulletedListItemBlock from "./blocks/BulletedListItemBlock.tsx";
 
-export default function NotionBlock(block: Block) {
+export default function NotionBlock(block: NotionBlock) {
   const { type } = block;
 
   switch (type) {
