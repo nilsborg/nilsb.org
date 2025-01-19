@@ -55,7 +55,7 @@ export async function getPosts(refresh: boolean) {
   });
 }
 
-export async function getPostBySlug(slug: string, refresh: boolean) {
+export async function getPostBySlug(refresh: boolean, slug: string) {
   if (!postsDbId) throw new Error("Database ID not found");
 
   return await getCachedOrFetch(["posts", slug], refresh, async () => {

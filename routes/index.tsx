@@ -3,32 +3,15 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { getPosts } from "../utils/notion.ts";
 import { formatDate } from "../utils/formatDate.ts";
 import { isSignificantUpdate } from "../utils/isSignificantUpdate.ts";
+import { createHandler } from "../utils/handlers.ts";
 
 export const handler: Handlers = {
-  async GET(_req, ctx) {
-    const url = new URL(_req.url);
-    const refresh = url.searchParams.get("refresh") === "true";
-    const { data, version } = await getPosts(refresh);
-
-    if (!data) {
-      return ctx.renderNotFound({
-        message: "Can't get posts",
-      });
-    }
-    const resp = await ctx.render(data);
-    const headers = new Headers(resp.headers);
-    // Set cache headers
-    headers.set(
-      "Cache-Control",
-      "public, max-age=60, stale-while-revalidate=3600",
+  GET(req, ctx) {
+    return createHandler(
+      req,
+      ctx,
+      (refresh) => getPosts(refresh),
     );
-    // Set ETag based on content version
-    headers.set("ETag", `"${version}"`);
-
-    return new Response(resp.body, {
-      status: resp.status,
-      headers,
-    });
   },
 };
 
