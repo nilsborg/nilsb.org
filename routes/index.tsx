@@ -1,4 +1,4 @@
-import { getPage, getPosts } from "../utils/notion.ts";
+import { getPosts } from "../utils/notion.ts";
 
 export default async function Home() {
   const posts = await getPosts();

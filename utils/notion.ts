@@ -74,26 +74,3 @@ export async function getPostBySlug(slug: string) {
     throw error;
   }
 }
-
-export type Block = Awaited<
-  ReturnType<typeof notion.blocks.children.list>
->["results"][number];
-
-export function renderBlock(block: Block): string {
-  switch (block.type) {
-    case "paragraph":
-      return `<p>${
-        block.paragraph.rich_text.map((t) => t.plain_text).join("")
-      }</p>`;
-    case "heading_1":
-      return `<h1>${
-        block.heading_1.rich_text.map((t) => t.plain_text).join("")
-      }</h1>`;
-    case "heading_2":
-      return `<h2>${
-        block.heading_2.rich_text.map((t) => t.plain_text).join("")
-      }</h2>`;
-    default:
-      return "";
-  }
-}
