@@ -1,0 +1,12 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+
+type Props = CollectionEntry<"blog">;
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<FormattedDate date={post.data.date} />
+<Content />

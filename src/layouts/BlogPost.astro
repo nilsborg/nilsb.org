@@ -5,10 +5,10 @@ import Base from "./Base.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, summary, date, lastmod, heroImage } = Astro.props;
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={summary}>
   <article class="grid gap-4">
     {
       heroImage && (
@@ -20,16 +20,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
     <header class="title">
       <div class="date">
-        <FormattedDate date={pubDate} />
+        <FormattedDate date={date} />
         {
-          updatedDate && (
+          lastmod && (
             <div class="last-updated-on">
-              Last updated on <FormattedDate date={updatedDate} />
+              Last updated on <FormattedDate date={lastmod} />
             </div>
           )
         }
       </div>
-      <h1 class="text-2xl">{title}</h1>
+      {title && <h1 class="text-2xl">{title}</h1>}
     </header>
     <slot />
   </article>
