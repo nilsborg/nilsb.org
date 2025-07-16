@@ -2,6 +2,7 @@
 title: Visiting the extended family in Lima
 date: 2025-07-15
 tags: peru, travel, family
+summary: Traveling to Peru with the family, going to Lima first
 ---
 
 So we went to Peru in our summer, their winter holidays. For the kids and myself it’s the first time in Peru ever. Actually the first time in South America ever now that I think of it. 

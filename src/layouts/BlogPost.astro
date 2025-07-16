@@ -29,8 +29,10 @@ const { title, summary, date, lastmod, heroImage } = Astro.props;
           )
         }
       </div>
-      {title && <h1 class="text-2xl">{title}</h1>}
+      {title && <h1 class="text-4xl">{title}</h1>}
     </header>
-    <slot />
+    <div class="">
+      <slot />
+    </div>
   </article>
 </Base>
