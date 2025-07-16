@@ -1,46 +1,12 @@
 {
-  "name": "Astro Development (pnpm)",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
-  "features": {
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/pnpm:1": {
-      "version": "latest"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [
         "astro-build.astro-vscode",
-        "ms-vscode.vscode-typescript-next",
-        "bradlc.vscode-tailwindcss",
         "esbenp.prettier-vscode",
-        "ms-vscode.vscode-json",
-        "formulahendry.auto-rename-tag",
-        "christian-kohler.path-intellisense"
-      ],
-      "settings": {
-        "typescript.preferences.includePackageJsonAutoImports": "on",
-        "typescript.suggest.autoImports": true,
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "emmet.includeLanguages": {
-          "astro": "html"
-        },
-        "npm.packageManager": "pnpm"
-      }
-    }
-  },
-  "postCreateCommand": "pnpm install",
-  "forwardPorts": [4321, 3000, 4173],
-  "portsAttributes": {
-    "4321": {
-      "label": "Astro Dev Server",
-      "onAutoForward": "notify"
-    },
-    "4173": {
-      "label": "Astro Preview Server",
-      "onAutoForward": "silent"
+        "unifiedjs.vscode-mdx"
+      ]
     }
   }
 }
