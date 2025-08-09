@@ -1,2 +1,68 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: system-ui;
+
+  --step--2: clamp(0.6944rem, 0.6922rem + 0.01vw, 0.7035rem);
+  --step--1: clamp(0.8333rem, 0.8072rem + 0.116vw, 0.9377rem);
+  --step-0: clamp(1rem, 0.9375rem + 0.2778vw, 1.25rem);
+  --step-1: clamp(1.2rem, 1.0834rem + 0.5181vw, 1.6663rem);
+  --step-2: clamp(1.44rem, 1.2447rem + 0.8679vw, 2.2211rem);
+  --step-3: clamp(1.728rem, 1.4198rem + 1.3697vw, 2.9607rem);
+  --step-4: clamp(2.0736rem, 1.6053rem + 2.0812vw, 3.9467rem);
+  --step-5: clamp(2.4883rem, 1.7952rem + 3.0807vw, 5.2609rem);
+
+  /* Overriding text scale */
+  --text-*: initial;
+  --text-xs: var(--step--2);
+  --text-sm: var(--step--1);
+  --text-base: var(--step-0);
+  --text-lg: var(--step-1);
+  --text-xl: var(--step-2);
+  --text-2xl: var(--step-3);
+  --text-3xl: var(--step-4);
+  --text-4xl: var(--step-5);
+
+  /* Spacings */
+  --space-4xs-3xs: clamp(0.125rem, 0.0781rem + 0.2083vw, 0.3125rem);
+  --space-3xs-2xs: clamp(0.3125rem, 0.1875rem + 0.625vw, 0.75rem);
+  --space-2xs-xs: clamp(0.5625rem, 0.4018rem + 0.8036vw, 1.125rem);
+  --space-xs-s: clamp(0.875rem, 0.6964rem + 0.8929vw, 1.5rem);
+  --space-s-m: clamp(1.125rem, 0.8036rem + 1.6071vw, 2.25rem);
+  --space-m-l: clamp(1.6875rem, 1.3125rem + 1.875vw, 3rem);
+  --space-l-xl: clamp(2.25rem, 1.6071rem + 3.2143vw, 4.5rem);
+  --space-xl-2xl: clamp(3.375rem, 2.625rem + 3.75vw, 6rem);
+  --space-2xl-3xl: clamp(4.5rem, 3.2143rem + 6.4286vw, 9rem);
+
+  /* Overriding spacing scale */
+  --spacing-*: initial;
+  --spacing-0: 0;
+
+  --spacing-1: var(--space-4xs-3xs);
+  --spacing-2: var(--space-3xs-2xs);
+  --spacing-3: var(--space-2xs-xs);
+  --spacing-4: var(--space-xs-s);
+  --spacing-5: var(--space-s-m);
+  --spacing-6: var(--space-m-l);
+  --spacing-7: var(--space-l-xl);
+  --spacing-8: var(--space-xl-2xl);
+  --spacing-9: var(--space-2xl-3xl);
+}
+
+/* Typography plugin customization */
+@theme {
+  /* Customize default paragraph margins */
+  --typography-p-margin-top: 0.25em;
+  --typography-p-margin-bottom: 0.25em;
+
+  /* Or if you want to customize for specific prose variants */
+  --typography-stone-p-margin-top: 0.25em;
+  --typography-stone-p-margin-bottom: 0.25em;
+}
+
+/* Alternative: Override prose styles directly */
+.prose p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}

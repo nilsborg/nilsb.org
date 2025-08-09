@@ -1,12 +1,47 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
-import FormattedDate from "./FormattedDate.astro";
+import Date from "./Date.astro";
 
 type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
+
 const { Content } = await render(post);
 ---
 
-<FormattedDate date={post.data.date} />
-<Content />
+<article class="shortpost | grid justify-items-start gap-1 px-5">
+  <header>
+    <Date date={post.data.date} />
+  </header>
+  <div
+    class="prose rounded-lg bg-stone-50 p-3 prose-stone prose-img:my-1 prose-img:max-h-[22rem] prose-img:w-[85vw] prose-img:rounded-lg prose-img:shadow-lg"
+  >
+    <Content />
+  </div>
+</article>
+
+<style is:global>
+  .shortpost p:has(img) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    width: 100vw;
+    position: relative;
+    left: calc(-1 * (var(--spacing-3) + var(--spacing-5)));
+    overflow: auto;
+    padding-bottom: var(--spacing-3);
+    scroll-snap-type: x mandatory;
+    overscroll-behavior: contain;
+
+    &:before {
+      content: "";
+      width: calc((var(--spacing-3) + var(--spacing-5)));
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    img {
+      scroll-snap-align: center;
+    }
+  }
+</style>

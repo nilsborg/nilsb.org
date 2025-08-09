@@ -1,41 +1,26 @@
 ---
 import { getCollection } from "astro:content";
-import FormattedDate from "../../components/FormattedDate.astro";
 import Base from "../../layouts/Base.astro";
 import ShortPost from "../../components/ShortPost.astro";
+import PostPreview from "../../components/PostPreview.astro";
 const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const title = "blog";
+const title = "Blog";
 const description = "My blog posts, articles, and other writings.";
 ---
 
 <Base title={title} description={description}>
   <section>
-    <ul class="space-y-4">
+    <ul class="space-y-7">
       {
         posts.map((post) => (
           <li>
-            {post.data.title ? (
-              <a href={`/blog/${post.id}/`}>
-                {post.data.heroImage && (
-                  <img
-                    width={720}
-                    height={360}
-                    src={post.data.heroImage}
-                    alt=""
-                  />
-                )}
-
-                <h4 class="title">{post.data.title}</h4>
-
-                <p class="date">
-                  <FormattedDate date={post.data.date} />
-                </p>
-              </a>
-            ) : (
+            {post.data.microblog ? (
               <ShortPost {...post} />
+            ) : (
+              <PostPreview {...post.data} id={post.id} />
             )}
           </li>
         ))

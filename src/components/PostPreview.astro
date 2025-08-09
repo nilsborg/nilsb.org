@@ -1,0 +1,14 @@
+---
+import Date from "./Date.astro";
+
+const { date, title, id } = Astro.props;
+---
+
+<div
+  class="grid justify-items-start gap-2 px-5 decoration-emerald-500 transition-colors hover:underline"
+>
+  {date && <Date {date} />}
+  <a href={`/blog/${id}/`}>
+    <h2 class="title font-serif text-2xl">{title} <span>↠</span></h2>
+  </a>
+</div>

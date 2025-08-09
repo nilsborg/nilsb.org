@@ -1,0 +1,11 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+
+const { date } = Astro.props;
+---
+
+<datetime
+  class="date rounded-sm bg-emerald-200 p-1 text-xs leading-none font-bold text-emerald-700"
+>
+  <FormattedDate {date} />
+</datetime>
