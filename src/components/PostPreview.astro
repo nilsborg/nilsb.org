@@ -7,6 +7,6 @@ const { date, title, id } = Astro.props;
 <article class="grid justify-items-start gap-2 px-5">
   {date && <Date {date} />}
   <a href={`/blog/${id}/`}>
-    <h2 class="title font-serif text-2xl lowercase">{title}</h2>
+    <h2 class="title font-serif text-2xl">{title}</h2>
   </a>
 </article>
