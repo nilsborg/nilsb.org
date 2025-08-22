@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import ShortPost from "./ShortPost.astro";
+import PostPreview from "./PostPreview.astro";
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+---
+
+<section>
+  <header class="flex items-baseline gap-3 p-5">
+    <h2 class="text-sm opacity-50">latest Posts</h2>
+
+    <a href="/blog">all</a>
+  </header>
+  <div class="space-y-5">
+    {
+      posts.map((post) =>
+        post.data.microblog ? (
+          <ShortPost {...post} />
+        ) : (
+          <PostPreview {...post.data} id={post.id} />
+        )
+      )
+    }
+  </div>
+</section>

@@ -4,7 +4,7 @@ import Base from "../../layouts/Base.astro";
 import ShortPost from "../../components/ShortPost.astro";
 import PostPreview from "../../components/PostPreview.astro";
 const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
 const title = "Blog";
@@ -12,19 +12,15 @@ const description = "My blog posts, articles, and other writings.";
 ---
 
 <Base title={title} description={description}>
-  <section>
-    <ul class="space-y-7">
-      {
-        posts.map((post) => (
-          <li>
-            {post.data.microblog ? (
-              <ShortPost {...post} />
-            ) : (
-              <PostPreview {...post.data} id={post.id} />
-            )}
-          </li>
-        ))
-      }
-    </ul>
+  <section class="space-y-5">
+    {
+      posts.map((post) =>
+        post.data.microblog ? (
+          <ShortPost {...post} />
+        ) : (
+          <PostPreview {...post.data} id={post.id} />
+        )
+      )
+    }
   </section>
 </Base>

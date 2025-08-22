@@ -66,3 +66,23 @@
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
+
+main a {
+  @apply inline-flex items-center gap-1 text-emerald-600 transition-colors;
+
+  &:hover {
+    @apply text-emerald-400;
+  }
+
+  &:not(&[data-variant="back"]):after {
+    content: "↠";
+
+    @apply text-[1.5em];
+  }
+
+  &[data-variant="back"]:before {
+    content: "↞";
+
+    @apply text-[1.5em];
+  }
+}
